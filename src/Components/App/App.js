@@ -58,9 +58,9 @@ class App extends Component {
   search(term){
     console.log('HIYA   App Search');
     console.log(term);
-    Spotify.getAccessToken();
+  //  Spotify.getAccessToken();
     Spotify.search(term).then(tracks => {
-      this.setState({tracks: tracks});
+      this.setState({searchResults: tracks});
     });
   }
 
