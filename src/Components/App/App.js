@@ -10,19 +10,9 @@ class App extends Component {
       super(props);
 
       this.state = {
-           searchResults : [
-             {name: "name"},
-             {artist: "artist"},
-             {album: "album"},
-             {id: "id"}
-           ],
-           playlistName : "JTList",
-           playlistTracks : [
-             {name: "name"},
-             {artist: "artist"},
-             {album: "album"},
-             {id: "id"}
-           ]
+           searchResults : [],
+           playlistName : "New Playlist",
+           playlistTracks : []
        };
        this.addTrack = this.addTrack.bind(this);
        this.removeTrack = this.removeTrack.bind(this);
@@ -34,16 +24,17 @@ class App extends Component {
   addTrack(track) {
     if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
        return;
-      }
-    this.state.playlist.push(track);   //does this add track to playlist???
+     } else {
+       let myTracks = this.state.playlistTracks
+       myTracks.push(track);
+       this.setState({playlistTracks: myTracks});
+     }
   }
 
   removeTrack(track){
-    let myVar = this.state.playlistTracks.filter(savedTrack =>
-      savedTrack.id === track.id
-    );
-
-    this.setState({playlistTracks : myVar})
+    let myTracks = this.state.playlistTracks;
+    const newTracks = myTracks.filter(playlistTrack => track.id !== playlistTrack.id);
+    this.setState({playlistTracks: newTracks});
   }
 
   updatePlaylistName(name)  {
@@ -51,14 +42,19 @@ class App extends Component {
   }
 
   savePlaylist(){
-    const trackURIs = this.state.playlistTracks.map();
-      ///CHECK THIS  step 63
-    }
+    const tracklist = this.state.playlistTracks.map(track => track.uri);
+    const listName = this.state.playlistName;
+    Spotify.savePlaylist(listName, tracklist)
+    this.setState({
+      playlistName: 'New Playlist',
+      playlistTracks: []
+    })
+  }
 
   search(term){
-    console.log('HIYA   App Search');
-    console.log(term);
-  //  Spotify.getAccessToken();
+//    console.log('HIYA   App Search');
+//    console.log(term);
+//    Spotify.getAccessToken();
     Spotify.search(term).then(tracks => {
       this.setState({searchResults: tracks});
     });
