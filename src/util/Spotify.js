@@ -26,9 +26,10 @@ const Spotify = {
   },
 
   search(term){
-   this.getAccessToken();
+//   this.getAccessToken();
    return fetch(`https://api.spotify.com/v1/search?type=track&limit=20&q=${term}`, {
-     headers: {Authorization: `Bearer ${accessToken}`}
+     headers: {
+       Authorization: `Bearer ${accessToken}`}
    }).then(response => {
      if (response.ok) {
        return response.json();
@@ -56,12 +57,13 @@ const Spotify = {
   let playlist_id
   if (name && list) {
     return fetch('https://api.spotify.com/v1/me', {
-      headers: {Authorization: `Bearer ${accessToken}`}
+      headers: {
+        Authorization: `Bearer ${accessToken}`}
     }).then(response => {
       if (response.ok) {
         return response.json();
       }
-      throw new Error('Request Failed!');
+      throw new Error('uer ID Request Failed!');
     }, networkError => console.log(networkError.message)
     ).then(jsonResponse => {
       return user_id = jsonResponse.id;
@@ -75,21 +77,22 @@ const Spotify = {
         if (response.ok) {
           return response.json();
         }
-        throw new Error('Request Failed!');
+        throw new Error('Playlist Request Failed!');
       }, networkError => console.log(networkError.message)
       ).then(jsonResponse => {
         return playlist_id = jsonResponse.id;
       });
     }).then(()=> {
       return fetch(`https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks`, {
-        headers: {Authorization: `Bearer ${accessToken}`},
+        headers: {
+          Authorization: `Bearer ${accessToken}`},
         method: 'POST',
         body: JSON.stringify({uris: list})
       }).then(response => {
         if (response.ok) {
           return response.json();
         }
-        throw new Error('Request Failed!');
+        throw new Error(' Playlist tracks update Request Failed!');
       }, networkError => console.log(networkError.message)
       ).then(jsonResponse => {
       });
